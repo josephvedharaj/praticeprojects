@@ -4,7 +4,7 @@ body{
     display: flex;
     justify-content: center;
     align-items: center;
-    background-image: url('images/mountain background.jpg');
+    background-image: url('mountain background.jpg');
     background-size: cover;
     background-position: center;
     font-family: 'Gill Sans', 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
