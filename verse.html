@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+  <title>TorahCalc - Verse Selection</title>
+  <style>
+/* ------------------ General Body ------------------ */
+body {
+    font-family: "Times New Roman", serif;
+    background-color: #f9f3ff;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+}
+
+/* ------------------ Home Container ------------------ */
+#home {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    padding-top: 40px;
+    box-sizing: border-box;
+}
+
+/* ------------------ Title ------------------ */
+h1 {
+    font-size: 3rem;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+/* ------------------ Form & Selection Wrapper ------------------ */
+form#verseForm {
+    width: 90%;
+    max-width: 600px;
+}
+
+#selectionWrapper {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 50px;
+}
+
+/* ------------------ Dropdown ------------------ */
+.dropdown {
+    position: relative;
+    flex: 1 1 120px;
+    min-width: 100px;
+}
+
+.dropdown-selected {
+    padding: 10px 12px;
+    border-radius: 8px;
+    border: 1.5px solid #ccc;
+    background: white;
+    cursor: pointer;
+    text-align: center;
+}
+
+.dropdown-list {
+    position: absolute;
+    top: 110%;
+    left: 0;
+    right: 0;
+    background: white;
+    border: 1.5px solid #ccc;
+    border-radius: 8px;
+    max-height: 150px;
+    overflow-y: auto;
+    display: none;
+    z-index: 1000;
+}
+
+.dropdown-list div {
+    padding: 8px 10px;
+    cursor: pointer;
+}
+
+.dropdown-list div:hover {
+    background: #ddd;
+}
+
+/* ------------------ Submit Button ------------------ */
+#submit {
+    border-radius: 22px;
+    font-size: 1rem;
+    padding: 12px 18px;
+    background-color: #ccc2ee;
+    cursor: pointer;
+    border: none;
+    transition: 0.3s;
+    flex: 1 1 100%;
+    min-width: 120px;
+}
+
+#submit:hover {
+    background-color: #b7a6e0;
+}
+
+/* ------------------ Responsive Adjustments ------------------ */
+@media screen and (max-width: 768px) {
+    h1 {
+        font-size: 2.2rem;
+    }
+
+    #selectionWrapper {
+        gap: 8px;
+    }
+
+    .dropdown-selected {
+        padding: 8px 10px;
+        font-size: 0.9rem;
+    }
+
+    #submit {
+        font-size: 0.95rem;
+        padding: 10px 14px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    h1 {
+        font-size: 1.8rem;
+    }
+
+    .dropdown-selected {
+        font-size: 0.85rem;
+        padding: 6px 8px;
+    }
+
+    #submit {
+        font-size: 0.85rem;
+        padding: 8px 12px;
+    }
+}
+
+  </style>
+</head>
+<body>
+<div id="home">
+  <h1>TorahCalc</h1>
+
+  <form id="verseForm">
+    <div id="selectionWrapper">
+      <div class="dropdown" id="bookDropdown">
+        <div class="dropdown-selected" id="bookSelected"></div>
+        <div class="dropdown-list" id="bookList"></div>
+      </div>
+      <div class="dropdown" id="chapterDropdown">
+        <div class="dropdown-selected" id="chapterSelected"></div>
+        <div class="dropdown-list" id="chapterList"></div>
+      </div>
+      <div class="dropdown" id="verseDropdown">
+        <div class="dropdown-selected" id="verseSelected"></div>
+        <div class="dropdown-list" id="verseList"></div>
+      </div>
+      <input type="submit" value="->>" id="submit">
+    </div>
+  </form>
+</div>
+
+<script>
+// Example book data: chapters = number of verses
+const booksData = {
+  "Genesis": [31,25,24,26,32,22,24,22,29,32,32,20,18,24,21,16,27,33,38,18,34,24,20,67,34,35,46,22,35,43,55,32,20,31,29,43,36,30,23,23,57,38,34,34,28,34,31,22,33,26],
+  "Exodus": [22,25,22,31,23,30,25,32,35,29,10,51,22,31,27,36,16,27,25,26,36,31,33,18,40]
+  // Add other books here
+};
+
+// Dropdown elements
+const bookDropdown = document.getElementById('bookDropdown');
+const chapterDropdown = document.getElementById('chapterDropdown');
+const verseDropdown = document.getElementById('verseDropdown');
+
+const bookSelected = document.getElementById('bookSelected');
+const chapterSelected = document.getElementById('chapterSelected');
+const verseSelected = document.getElementById('verseSelected');
+
+const bookListDiv = document.getElementById('bookList');
+const chapterListDiv = document.getElementById('chapterList');
+const verseListDiv = document.getElementById('verseList');
+
+let currentBook = Object.keys(booksData)[0];
+let currentChapter = 1;
+let currentVerse = 1;
+
+// Helper to populate dropdowns
+function populateDropdown(listDiv, items) {
+  listDiv.innerHTML = '';
+  items.forEach(item => {
+    const div = document.createElement('div');
+    div.textContent = item;
+    listDiv.appendChild(div);
+  });
+}
+
+// Populate books
+populateDropdown(bookListDiv, Object.keys(booksData));
+bookSelected.textContent = currentBook;
+
+// Update chapters & verses
+function updateChapters() {
+  const chapters = booksData[currentBook].map((_, i) => i + 1);
+  populateDropdown(chapterListDiv, chapters);
+  currentChapter = 1;
+  chapterSelected.textContent = currentChapter;
+  updateVerses();
+}
+
+function updateVerses() {
+  const verses = booksData[currentBook][currentChapter - 1];
+  const verseArray = Array.from({length: verses}, (_, i) => i + 1);
+  populateDropdown(verseListDiv, verseArray);
+  currentVerse = 1;
+  verseSelected.textContent = currentVerse;
+}
+
+// Dropdown setup
+function setupDropdown(dropdown, selectedDiv, listDiv, onSelect) {
+  selectedDiv.addEventListener('click', () => {
+    listDiv.style.display = listDiv.style.display === 'block' ? 'none' : 'block';
+  });
+
+  listDiv.addEventListener('click', (e) => {
+    if (e.target.tagName === 'DIV') {
+      selectedDiv.textContent = e.target.textContent;
+      listDiv.style.display = 'none';
+      onSelect(e.target.textContent);
+    }
+  });
+
+  document.addEventListener('click', e => {
+    if (!dropdown.contains(e.target)) listDiv.style.display = 'none';
+  });
+}
+
+// Setup all dropdowns
+setupDropdown(bookDropdown, bookSelected, bookListDiv, val => {
+  currentBook = val;
+  updateChapters();
+});
+setupDropdown(chapterDropdown, chapterSelected, chapterListDiv, val => {
+  currentChapter = parseInt(val);
+  updateVerses();
+});
+setupDropdown(verseDropdown, verseSelected, verseListDiv, val => {
+  currentVerse = parseInt(val);
+});
+
+// Initial population
+updateChapters();
+
+// Submit: fetch JSON and pass verse text to result.html
+document.getElementById('verseForm').addEventListener('submit', async e => {
+  e.preventDefault();
+  try {
+    const response = await fetch(`${currentBook}${currentChapter}.json`);
+    if (!response.ok) throw new Error("Chapter JSON not found");
+    const chapterData = await response.json();
+    const verseText = chapterData[currentVerse] || "Verse not found";
+
+    sessionStorage.setItem('verseText', verseText);
+    window.location.href = 'result.html';
+  } catch(err) {
+    alert("Error fetching verse: " + err.message);
+    console.error(err);
+  }
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>TorahCalc - Manual Input</title>
+</head>
+<body>
+<div id="home">
+    <h1>TorahCalc</h1>
+    <form id="manualForm" autocomplete="off">
+        <input type="text" name="verse" id="verse" placeholder="Enter Hebrew text" autofocus>
+        <input type="submit" value="->>" id="submit">
+    </form>
+</div>
+
+<script>
+document.getElementById('manualForm').addEventListener('submit', function(e){
+    e.preventDefault(); // prevent page reload
+    const verse = document.getElementById('verse').value.trim();
+    if(!verse){
+        alert("Please enter Hebrew text!");
+        return;
+    }
+    
+    // Store raw input as verseText
+    sessionStorage.setItem('verseText', verse);
+    
+    // Redirect to result page
+    window.location.href = 'result.html';
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TorahCalc</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      height: 100dvh;
+      width: 100%;
+      margin: 0;
+      font-family: "Times New Roman", serif;
+      background-color: #f9f3ff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      padding: 16px;
+      box-sizing: border-box;
+    }
+
+    h1 {
+      font-size: 64px;
+      margin-bottom: 50px;
+      text-align: center;
+      cursor: default;
+    }
+
+    .option-wrapper {
+      display: flex;
+      flex-direction: column; /* stack vertically */
+      gap: 30px;
+      justify-content: center;
+      align-items: center; /* center horizontally */
+      width: 100%;
+      max-width: 400px; /* container width */
+    }
+
+    .option {
+  display: flex;            /* make it a flex container */
+  justify-content: center;  /* horizontal centering */
+  align-items: center;      /* vertical centering */
+  background-color: #ccc2ee;
+  border-radius: 22px;
+  padding: 40px 60px;
+  font-size: 24px;
+  font-weight: bold;
+  cursor: pointer;
+  text-decoration: none;
+  color: black;
+  box-shadow: 3px 3px 8px rgba(0,0,0,0.3);
+  transition: transform 0.15s ease, background 0.2s ease;
+  width: 100%;
+  text-align: center;       /* fallback */
+}
+
+
+    .option:hover {
+      background-color: #b8a5e8;
+      transform: scale(1.05);
+    }
+
+    @media (max-width: 600px) {
+      h1 {
+        font-size: 48px;
+        margin-bottom: 30px;
+      }
+
+      .option {
+        padding: 30px 40px;
+        font-size: 20px;
+      }
+    }
+
+    @media (max-width: 400px) {
+      h1 {
+        font-size: 36px;
+        margin-bottom: 20px;
+      }
+
+      .option {
+        padding: 25px 30px;
+        font-size: 18px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>TorahCalc</h1>
+  <div class="option-wrapper">
+    <a href="manual.html" class="option">Manual Input</a>
+    <a href="verse.html" class="option">Verse Selection</a>
+  </div>
+</body>
+</html>
